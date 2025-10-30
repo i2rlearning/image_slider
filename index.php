@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scriptural Image Slider</title>
-
+</head>
     <style>
         body {
             margin: 0; /* Remove default body margin */
@@ -320,7 +320,6 @@
         }
     </style>
 
-</head>
 <body>
         
     <div class="navbar" id="myTopnav">
@@ -583,3 +582,4 @@
         </script>
 </body>
 </html>
+
