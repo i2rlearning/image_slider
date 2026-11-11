@@ -315,9 +315,9 @@ function initSlideshowUIAndEvents() {
       loadImages(e.target.value);
     });
 
-    // Set default and trigger initial load
-    categorySelect.value = "butterflies";
-    loadImages("butterflies");
+    // Automatically grab whichever option has 'selected' in the HTML
+    const initialCategory = categorySelect.value;
+    loadImages(initialCategory);
   }
 }
 
