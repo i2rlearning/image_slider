@@ -1,0 +1,438 @@
+/******* BASE STYLES *******/
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #000; /* prevents white showing in any tiny gaps */
+}
+
+/* Prevent sideways + vertical "play" caused by mobile viewport changes */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: #000;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* IMPORTANT: avoid default body scroll bounce in fullscreen slideshow */
+body {
+  overflow-y: hidden;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.labelSlideshowControls {
+  display: none;
+}
+
+/******* NAVBAR CORE *******/
+.navbar {
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  min-height: 50px;
+  gap: 20px;
+  box-sizing: border-box;
+  color: white;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 5px 12px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar a:hover {
+  background-color: #0000ff !important;
+  color: #ffffff !important;
+  border-color: #0000ff !important;
+}
+
+/******* CATEGORY COMBOBOX (SLIM & WHITE TEXT) *******/
+.category-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-label {
+  color: white !important;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+#category-select {
+  background-color: #444;
+  color: white;
+  border: 1px solid #666;
+  border-radius: 4px;
+  height: 28px;
+  padding: 0 25px 0 8px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 10px auto;
+  line-height: 28px;
+}
+
+#category-select option {
+  background-color: #333;
+  color: white;
+}
+
+/******* AUTOPLAY TOGGLE *******/
+.autoplay-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  font-size: 14px;
+  color: white;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider-switch {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #666;
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.slider-switch:before {
+  position: absolute;
+  content: "";
+  height: 14px; width: 14px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider-switch { background-color: #0000ff; }
+input:checked + .slider-switch:before { transform: translateX(20px); }
+
+/******* DOWNLOAD & INFO *******/
+#current-image-url-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  overflow: hidden;
+}
+
+#current-image-url {
+  color: white;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.download-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 4px;
+  min-width: 70px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.download-button:hover {
+  background: #000080;
+  border-color: #000080;
+}
+
+/******* SLIDER/IMAGE STYLES *******/
+.slider-container {
+  position: relative;
+  width: 100%;
+
+  /* Desktop uses classic vh */
+  height: calc(100vh - 120px);
+
+  overflow: hidden;
+  background-color: #000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Prevent scroll chaining/bounce originating from the slider */
+  overscroll-behavior: none;
+  touch-action: pan-x; /* blocks vertical dragging on the slider area */
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overscroll-behavior: none;
+}
+
+.slide.active { opacity: 1; }
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.5));
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px; height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 0.3s, background-color 0.3s;
+}
+
+.slider-container:hover .arrow { opacity: 1; }
+.arrow:hover { background-color: #0000ff; }
+.arrow-prev { left: 10px; }
+.arrow-next { right: 10px; }
+
+/******* HIDES HAMBURGER BARS *******/
+.navbar .icon {
+  display: none;
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media screen and (max-width: 850px) {
+
+  /* Make the slideshow edge-to-edge on mobile */
+  .container {
+    padding: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /*
+    IMPORTANT:
+    - Use svh (stable viewport height) to stop the up/down "play" when the mobile address bar expands/collapses.
+    - Subtract the CLOSED navbar height only (about 50px).
+    - Do NOT add extra bottom padding here - that creates empty space.
+  */
+  .slider-container {
+    height: calc(100svh - 50px);
+    min-height: calc(100svh - 50px);
+
+    /* keep it truly fullscreen and stable */
+    overflow: hidden;
+    padding-bottom: 0;
+    overscroll-behavior: none;
+    touch-action: pan-x;
+  }
+
+  /* Hide menu items when closed */
+  .navbar > *:not(.icon) {
+    display: none !important;
+  }
+
+  /* Navbar Base Setup */
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    position: relative;
+    height: auto !important;
+    min-height: 50px;
+    overflow: visible !important;
+    z-index: 1000;
+  }
+
+  /* Overlay menu */
+  .navbar.responsive {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto !important;
+    background-color: #333;
+    display: flex !important;
+    flex-direction: column;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.5);
+    gap: 10px;
+    padding-bottom: 14px;
+  }
+
+  .navbar.responsive > *:not(.icon) {
+    display: block !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .navbar.responsive .labelAudioControls,
+  .navbar.responsive .labelSlideshowControls {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center;
+    height: 44px !important;
+    padding: 0 15px !important;
+    width: 100%;
+    background-color: orange;
+    color: black;
+    font-weight: bold;
+    box-sizing: border-box;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+  }
+
+  .navbar.responsive .category-wrapper,
+  .navbar.responsive .autoplay-container,
+  .navbar.responsive #current-image-url-container,
+  .navbar.responsive a:not(.icon):not(.download-button) {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    box-sizing: border-box;
+  }
+
+  .navbar.responsive a:not(.icon):not(.download-button) {
+    display: block !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .navbar.responsive .category-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 15px;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .navbar.responsive .autoplay-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .navbar.responsive #current-image-url-container {
+    display: block !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+
+  .navbar.responsive .download-button {
+    display: inline-block !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 8px 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 4px !important;
+    color: white !important;
+    box-sizing: border-box !important;
+    cursor: pointer;
+  }
+
+  .navbar.responsive .download-button:hover {
+    background: #0000ff !important;
+    border-color: #0000ff !important;
+  }
+
+  .navbar .icon,
+  .navbar.responsive .icon {
+    display: flex !important;
+    position: absolute !important;
+    right: 15px !important;
+    top: 0 !important;
+    height: 44px !important;
+    width: 44px;
+    align-items: center !important;
+    justify-content: center;
+    z-index: 1001 !important;
+    color: white;
+    text-decoration: none;
+    font-size: 20px !important;
+    font-weight: normal;
+    border-radius: 8px;
+    transition:
+      transform 0.12s ease,
+      background-color 0.12s ease,
+      color 0.12s ease;
+  }
+
+  .navbar .icon:hover,
+  .navbar.responsive .icon:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: #0000ff !important;
+    transform: scale(1.08);
+  }
+
+  .navbar .icon:active,
+  .navbar.responsive .icon:active {
+    transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .navbar .icon:focus-visible,
+  .navbar.responsive .icon:focus-visible {
+    outline: 2px solid #0000ff;
+    outline-offset: 2px;
+  }
+
+  .navbar.responsive #custom-audio-player {
+    padding-top: 0 !important;
+  }
+
+  .arrow {
+    display: none;
+  }
+}
